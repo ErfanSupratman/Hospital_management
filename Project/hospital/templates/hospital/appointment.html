@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Appoitment Details</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'hospital/login.css' %}"/>        
+        <meta charset="UTF-8">
+    </head>
+    <body>
+            <div class="login">
+                <div class="login-triangle"></div>
+            
+                <h2 class="login-header">Appointment Details</h2>
+            
+                <form class="login-container" method="POST">{% csrf_token %}
+                    <p>
+                        <input type="text" name="pname" placeholder="Patient Name" required="required">
+                    </p>
+                    <p>
+                        <input type="text" name="docName" placeholder="Doctor Name" required="required">
+                    </p>
+                    <p>
+                        <input placeholder="Appointment Date" type="text" onfocus="(this.type='date')" name="date" required="required">
+                    </p>
+                    <p>
+                        <input placeholder="Appointment Time" type="text" onfocus="(this.type='time')" name="time" required="required">
+                    </p>
+                    <p>
+                        <input type="text" name="ill" placeholder="Disease">
+                    </p>
+                    <p>
+                        <input placeholder="Last Visited Date" type="text" onfocus="(this.type='date')" name="ldate"> 
+                    </p>
+                    <p>
+                        <input type="number" name="age" placeholder="Age" required="required">
+                    </p>
+                    <p>
+                        <input type="submit" value="Submit">
+                    </p>
+                </form>
+            </div>
+
+    </body>
+</html>

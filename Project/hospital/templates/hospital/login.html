@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'hospital/login.css' %}"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="login">
+            <div class="login-triangle"></div>
+        
+            <h2 class="login-header">Log in</h2>
+        
+            <form class="login-container" method="POST">{% csrf_token %}
+                <p>
+                    <input type="text" placeholder="UserName" name="un">
+                </p>
+                <p>
+                    <input type="password" placeholder="Password" name="pwd">
+                </p>
+                <p>
+                    <input type="submit" value="Log in">
+                </p>
+                <a href="{% url 'signup' %}">
+                    <h6>First Time?SignUp</h6>
+                </a>
+                <a href="{% url 'forgetpassword' %}">
+                    <h6>Forgot Password?</h6>
+                </a>
+            </form>
+        </div>
+    </body>
+</html>
