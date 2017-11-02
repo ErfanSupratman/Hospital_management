@@ -16,7 +16,7 @@ def home(request):
 
 
 
-def login(request):
+def login_user(request):
     '''
         Acccepts the Login Details And checks wether the user is authenticated
     '''
@@ -27,9 +27,9 @@ def login(request):
         user = authenticate(username = username, password = password)
 
         if(user):
-            #login(request, user)
+            login(request, user)
             # If Registered Then Proceed
-            return HttpResponse("Login Successful Enjoy....!!!")
+            return HttpResponse(render(request, "hospital/login_success.html"))
 
         else:
             #if Not Registered Then ask to signup
@@ -77,7 +77,20 @@ def appointment(request):
         The Appointment page Creates an Appointment with the Doctor
     '''
     if(request.method=='POST'):
-        return HttpResponse("<h1>Details got inserted in the table</h1>")
+        Pname = request.POST.get('pname')
+        docname = request.POST.get('docname')
+        appointment_date = request.POST.get('date')
+        appointment_time = request.POST.get('time')
+        disease = request.POST.get('ill')
+        last_appointment = request.POST.get('ldate')
+        age = request.POST.get('age')
+        try:
+            c = connection.cursor()
+            c.execute("INSERT INTO hospital_appointment VALUES (1,'%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (Pname, docname, appointment_date, appointment_time, disease, last_appointment, age))
+            return HttpResponse("<h1>The Appointment Details Inserted.....!!!!!</h1>")
+        except Exception as e:
+            print(e)
+            
     else:
         return HttpResponse(render(request, "hospital/appointment.html"))
 

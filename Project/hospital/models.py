@@ -4,7 +4,7 @@ from django.db import models
 
 class SignUp(models.Model):
     '''
-        This creats a table Name Signup(or hospital_signup i.e preceeding with your databaseName) Migrate to Make Changes Happen
+        This creats a table By Name hospital_signup in the Hospital Databse.Migrate to Make Changes Happen
     '''
     patient_id = models.AutoField(primary_key = True)
     Name = models.CharField(max_length = 20)
@@ -13,3 +13,15 @@ class SignUp(models.Model):
     Gender = models.CharField(max_length = 8)
     Category = models.CharField(max_length = 20)
 
+class Appointment(models.Model):
+    '''
+        This creats a table By Name hospital_appointment in the Hospital Database.Migrate to Make Changes Happen
+    '''
+    Patient_Name = models.CharField(max_length = 20)
+    Doctor_Name = models.CharField(max_length = 20)
+    AppointmentDate = models.DateField()
+    AppointmentTime = models.TimeField()
+    Disease = models.CharField(max_length = 20)
+    Lastvisited = models.DateField()
+    Age = models.IntegerField()
+    
