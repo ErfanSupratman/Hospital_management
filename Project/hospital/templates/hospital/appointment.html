@@ -15,6 +15,9 @@
             
                 <form class="login-container" method="POST">{% csrf_token %}
                     <p>
+                        <input type="text" name="pid" placeholder="Patient ID" required="required">
+                    </p>
+                    <p>
                         <input type="text" name="pname" placeholder="Patient Name" required="required">
                     </p>
                     <p>
@@ -28,9 +31,6 @@
                     </p>
                     <p>
                         <input type="text" name="ill" placeholder="Disease">
-                    </p>
-                    <p>
-                        <input placeholder="Last Visited Date" type="text" onfocus="(this.type='date')" name="ldate"> 
                     </p>
                     <p>
                         <input type="number" name="age" placeholder="Age" required="required">

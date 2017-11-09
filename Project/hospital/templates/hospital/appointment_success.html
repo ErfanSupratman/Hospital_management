@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE>
+<html>
+    <head>
+        <title>Appointment Details</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'hospital/style.css' %}" />
+    </head>
+    <body>
+        <table width="100%" style="text-align: center" border="2px">
+            <thead>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Doctor Name</th>
+                <th>Appointment Date</th>
+                <th>Appointment Time</th>
+                <th>Disease</th>
+                <th>Age</th>
+            </thead>
+            <tbody>
+                {% for i in appointments %}
+                <tr>
+                    <td>{{i.0}}</td>
+                    <td>{{i.1}}</td>
+                    <td>{{i.2}}</td>
+                    <td>{{i.3}}</td>
+                    <td>{{i.4}}</td>
+                    <td>{{i.5}}</td>
+                    <td>{{i.6}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
