@@ -1,6 +1,4 @@
 from django.db import models
-import uuid
-from django.contrib.auth.models import User
 # Create your models here.
 
 class SignUp(models.Model):
@@ -13,6 +11,7 @@ class SignUp(models.Model):
     Contact = models.BigIntegerField()
     Gender = models.CharField(max_length = 8)
     Password = models.CharField(max_length = 20)
+    Email = models.CharField(max_length = 30)
 
 
 class Appointment(models.Model):
@@ -20,10 +19,9 @@ class Appointment(models.Model):
         This creats a table By Name hospital_appointment(hospital here is you App name) in the Hospital Database.Migrate to Make Changes Happen
     '''
     id = models.IntegerField(primary_key=True)
-    Patient_Name = models.CharField(max_length = 20)
-    Doctor_Name = models.CharField(max_length = 20)
+    pid = models.IntegerField()
+    Patient_Name = models.CharField(max_length=20)
+    Doctor_Name = models.CharField(max_length=20)
     AppointmentDate = models.DateField()
     AppointmentTime = models.TimeField()
-    Disease = models.CharField(max_length = 20)
-    Age = models.IntegerField()
-    
+    Disease = models.CharField(max_length=20)

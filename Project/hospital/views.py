@@ -3,10 +3,10 @@ from django.http import HttpResponse #Used to return the Http Response
 from django.db import connection #Used to Connect with The Database
 from django.contrib.auth.models import User #Used to store the login Information
 from django.contrib.auth import authenticate, login, logout #authenticate is used to confirm the logging user details
-import MySQLdb
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-import pickle
-
+from .models import SignUp,Appointment
+import MySQLdb
 # Create your views here.
 
 
@@ -36,6 +36,7 @@ def login_user(request):
         else:
             #if Not Registered Then ask to signup
             return HttpResponse(render(request, "hospital/login_fail.html"))
+        
     else:
         #If the method is "GET"
         return HttpResponse(render(request, "hospital/login.html"))
@@ -48,32 +49,27 @@ def signup(request):
         SignUp Page Accepts the signup Details.....
     '''
 
-    ob = open('hospital/test.p','rb')
-    ID = pickle.load(ob)
-    ID = float(ID)
+    ID = SignUp.objects.count()
+    ID+=1000   
     if(request.method == "POST"):
         ''' ID = int(request.POST.get('ID')) '''
         name = request.POST.get('Full_name')
         address = request.POST.get('Address')
         contact = int(request.POST.get('Contact'))
         gender = request.POST.get('Gender')
+        pemail = request.POST.get('email')
         password = request.POST.get('Password')
         Cpassword = request.POST.get('CPassword')
-        ob.close()
         if(password!=Cpassword):
             return HttpResponse("Passwords Do not Match")
 
         try:
             #Inserting the values into User table(Builtin) Which is checked for User Authentication The None feild is for email
-            user = User.objects.create_user(name, None, password)
+            user = User.objects.create_user(name, email = pemail, password = password, id=ID)
             #Establish The Connection
             c = connection.cursor()
             #Executing The Query
-            ID += 1
-            c.execute("INSERT INTO hospital_signup(patient_id,Name,Address,Contact,Gender,Password) VALUES ('%d','%s', '%s', '%d', '%s', '%s')" % (ID, name, address, contact, gender, password))
-            ob = open('hospital/test.p', 'wb')
-            pickle.dump(ID, ob)
-            ob.close()
+            c.execute("INSERT INTO hospital_signup(patient_id,Name,Address,Contact,Gender,Password,Email) VALUES ('%d','%s', '%s', '%d', '%s', '%s', '%s')" % (ID, name, address, contact, gender, password, pemail))
             return HttpResponse(render(request, "hospital/signsuccess.html"))
         except Exception as e:
             print(e)
@@ -88,23 +84,31 @@ def appointment(request):
     '''
         The Appointment page Creates an Appointment with the Doctor
     '''
-    if(request.method=='POST'):
+    if(request.method == 'POST'):
         pid = int(request.POST.get('pid'))
         Pname = request.POST.get('pname')
         docname = request.POST.get('docName')
         appointment_date = request.POST.get('date')
         appointment_time = request.POST.get('time')
         disease = request.POST.get('ill')
-        age = request.POST.get('age')
+        ID = Appointment.objects.count()
+        ID+=1
 
         try:
             c = connection.cursor()
-            c.execute("INSERT INTO hospital_appointment VALUES ('%d','%s', '%s', '%s', '%s', '%s', '%s')" % (
-                pid, Pname, docname, appointment_date, appointment_time, disease, age))
-            c.execute("Select * from hospital_appointment")
-            appointments = c.fetchall()
-            context = {"appointments" : appointments}
-            return HttpResponse(render(request, "hospital/appointment_success.html", context))
+            c.execute("Select * from hospital_appointment where AppointmentDate='%s' and AppointmentTime='%s' and Doctor_Name='%s'" % (appointment_date, appointment_time, docname))
+            free = c.fetchone()
+
+            if(free):
+                return HttpResponse("Sorry The Doctor is Busy in That Time")
+
+            else:
+                c.execute("INSERT INTO hospital_appointment(ID,pid,Patient_Name,Doctor_Name,AppointmentDate,AppointmentTime,Disease) VALUES (%d,%d,'%s', '%s', '%s', '%s', '%s')" % (
+                    ID, pid, Pname, docname, appointment_date, appointment_time, disease))
+                c.execute("Select * from hospital_appointment")
+                appointments = c.fetchall()
+                context = {"appointments" : appointments}
+                return HttpResponse(render(request, "hospital/appointment_success.html", context))
 
         except Exception as e:
             print(e)

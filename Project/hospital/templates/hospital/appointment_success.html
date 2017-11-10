@@ -14,18 +14,16 @@
                 <th>Appointment Date</th>
                 <th>Appointment Time</th>
                 <th>Disease</th>
-                <th>Age</th>
             </thead>
             <tbody>
                 {% for i in appointments %}
                 <tr>
-                    <td>{{i.0}}</td>
+                    <td>{{i.6}}</td>
+                    <td>{{i.5}}</td>
                     <td>{{i.1}}</td>
                     <td>{{i.2}}</td>
                     <td>{{i.3}}</td>
                     <td>{{i.4}}</td>
-                    <td>{{i.5}}</td>
-                    <td>{{i.6}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

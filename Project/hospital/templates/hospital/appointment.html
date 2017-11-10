@@ -14,11 +14,13 @@
                 <h2 class="login-header">Appointment Details</h2>
             
                 <form class="login-container" method="POST">{% csrf_token %}
-                    <p>
-                        <input type="text" name="pid" placeholder="Patient ID" required="required">
+                    <p  style="text-align:center">
+                        Patient Name : {{ user.username }}
+                        <input type="hidden" name="pname" value="{{ user.username }}"
                     </p>
-                    <p>
-                        <input type="text" name="pname" placeholder="Patient Name" required="required">
+                    <p style="text-align:center">
+                        Patient ID : {{ user.id }}
+                        <input type="hidden" name="pid" value="{{ user.id }}">
                     </p>
                     <p>
                         <input type="text" name="docName" placeholder="Doctor Name" required="required">
@@ -31,9 +33,6 @@
                     </p>
                     <p>
                         <input type="text" name="ill" placeholder="Disease">
-                    </p>
-                    <p>
-                        <input type="number" name="age" placeholder="Age" required="required">
                     </p>
                     <p>
                         <input type="submit" value="Submit">
