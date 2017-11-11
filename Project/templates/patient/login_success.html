@@ -5,9 +5,12 @@
         <title>Login Success</title>
         <link rel="stylesheet" type="text/css" href="{% static 'hospital/loginsuccess.css' %}">
     </head>
-    <h1>Hello {{ user.username }}</h1>
+    <h1>Hello {{ user.first_name }}</h1>
+    <h2>What are you Looking For??</h2>
     <h2>
-        Want an Appointment?
+        <a href="/appointment/">Appointments</a>
     </h2>
-    <a href="/appointment/">Appointments</a>
+    <h2>
+        <a href="/appointment/">Doctor Details</a>
+    </h2>
 </html>

@@ -10,6 +10,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <script>
+           function call() { alert("Passwords Donot Match....!!!!!!") }
+        </script>
         
     <div class="login">
         <div class="login-triangle"></div>
@@ -17,9 +20,6 @@
         <h2 class="login-header">SignUp</h2>
     
         <form class="login-container" method="POST">{% csrf_token %}
-            <!-- <p>
-                <input type="Number" placeholder="ID" name='ID' required="required">
-            </p> -->
             <p>
                 <input type="text" name="Full_name" placeholder="Name" required="required">
             </p>
@@ -48,5 +48,8 @@
             </p>
         </form>
     </div>
+    {% if stop %}
+        <script> call() </script>
+    {% endif %}
     </body>
 </html>

@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Registration</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'hospital/login.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <script>
+        function call() { alert("Passwords Donot Match....!!!!!!") }
+    </script>
+
+    <div class="login">
+        <div class="login-triangle"></div>
+
+        <h2 class="login-header">SignUp</h2>
+
+        <form class="login-container" method="POST">{% csrf_token %}
+            <p>
+                <input type="text" name="Full_name" placeholder="Name" required="required">
+            </p>
+            <p>
+                <input type="text" name="Address" placeholder="Address" required="required">
+            </p>
+            <p>
+                <input type="phone" name="Contact" placeholder="Contact" required="required">
+            </p>
+            <p>
+                <input type="email" name="email" placeholder="Email" required="required">
+            </p>
+            <p>
+                <input type="text" name="special" placeholder="Specialization" required="required">
+            </p>
+            <p>
+                <input type="text" name="degree" placeholder="Degree" required="required">
+            </p>
+            <p>
+                <input type="radio" name="Gender" value="Male" checked>Male
+                <input type="radio" name="Gender" value="Female">Female
+                <input type="radio" name="Gender" value="Other"> Other
+            </p>
+            <p>
+                <input type="password" name="Password" placeholder="Password" required="required">
+            </p>
+            <p>
+                <input type="password" name="CPassword" placeholder="Confirm Password" required="required">
+            </p>
+            <p>
+                <input type="submit" value="Register">
+            </p>
+        </form>
+    </div>
+    {% if stop %}
+    <script> call() </script> {% endif %}
+</body>
+
+</html>

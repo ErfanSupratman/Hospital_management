@@ -1,3 +1,7 @@
+table{
+
+}
+
 
 h1 {
     text-align: center;
@@ -10,7 +14,7 @@ body {
   color: #000000;
   font-family: Sans-Serif;
   padding: 30px;
-  background-color:#456;
+  background-color:whitesmoke;
 }
 
 a {
@@ -99,7 +103,7 @@ a:hover {
 .dd-menu li.divider{
   padding: 0;
   border-bottom: 1px solid #cccccc;
-} 
+}  
 
 
 

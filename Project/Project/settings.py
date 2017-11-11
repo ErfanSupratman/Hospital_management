@@ -38,6 +38,7 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = (
+    'Doctor.apps.DoctorConfig',
     'hospital.apps.HospitalConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'Project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

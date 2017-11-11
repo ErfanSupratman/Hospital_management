@@ -1,9 +1,8 @@
-from django.shortcuts import render #imports a render method which is userd to load the template
+from django.shortcuts import render,render_to_response #imports a render method which is userd to load the template
 from django.http import HttpResponse #Used to return the Http Response
 from django.db import connection #Used to Connect with The Database
 from django.contrib.auth.models import User #Used to store the login Information
 from django.contrib.auth import authenticate, login, logout #authenticate is used to confirm the logging user details
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import SignUp,Appointment
 import MySQLdb
@@ -14,7 +13,7 @@ def home(request):
     '''
         Home page..
     '''
-    return HttpResponse(render(request, "hospital/home.html"))
+    return HttpResponse(render(request, "patient/home.html"))
 
 
 
@@ -31,15 +30,15 @@ def login_user(request):
         if(user):
             login(request, user)
             # If Registered Then Proceed
-            return HttpResponse(render(request, "hospital/login_success.html"))
+            return HttpResponse(render(request, "patient/login_success.html"))
 
         else:
             #if Not Registered Then ask to signup
-            return HttpResponse(render(request, "hospital/login_fail.html"))
-        
+            return HttpResponse(render(request, "patient/login_fail.html"))
+
     else:
         #If the method is "GET"
-        return HttpResponse(render(request, "hospital/login.html"))
+        return HttpResponse(render(request, "patient/login.html"))
 
 
 
@@ -48,11 +47,9 @@ def signup(request):
     '''
         SignUp Page Accepts the signup Details.....
     '''
-
-    ID = SignUp.objects.count()
-    ID+=1000   
     if(request.method == "POST"):
-        ''' ID = int(request.POST.get('ID')) '''
+        ID = SignUp.objects.count()
+        ID += 1000
         name = request.POST.get('Full_name')
         address = request.POST.get('Address')
         contact = int(request.POST.get('Contact'))
@@ -60,23 +57,28 @@ def signup(request):
         pemail = request.POST.get('email')
         password = request.POST.get('Password')
         Cpassword = request.POST.get('CPassword')
+        dnames = name.split()
+
+
         if(password!=Cpassword):
-            return HttpResponse("Passwords Do not Match")
+            context = {"stop": True}
+            return HttpResponse(render(request, "patient/signup.html", context))
+
 
         try:
             #Inserting the values into User table(Builtin) Which is checked for User Authentication The None feild is for email
-            user = User.objects.create_user(name, email = pemail, password = password, id=ID)
+            user = User.objects.create_user(name, email = pemail, password = password, id=ID, first_name = dnames[0], last_name = dnames[-1], is_staff=0)
             #Establish The Connection
             c = connection.cursor()
             #Executing The Query
             c.execute("INSERT INTO hospital_signup(patient_id,Name,Address,Contact,Gender,Password,Email) VALUES ('%d','%s', '%s', '%d', '%s', '%s', '%s')" % (ID, name, address, contact, gender, password, pemail))
-            return HttpResponse(render(request, "hospital/signsuccess.html"))
+            return HttpResponse(render(request, "patient/signsuccess.html"))
         except Exception as e:
             print(e)
 
     else:
         #If the method is "GET"
-        return HttpResponse(render(request, "hospital/signup.html"))
+        return HttpResponse(render(request, "patient/signup.html"))
 
 
 @login_required
@@ -100,7 +102,8 @@ def appointment(request):
             free = c.fetchone()
 
             if(free):
-                return HttpResponse("Sorry The Doctor is Busy in That Time")
+                context = {"stop" : True}
+                return HttpResponse(render(request, "patient/appointment.html", context))
 
             else:
                 c.execute("INSERT INTO hospital_appointment(ID,pid,Patient_Name,Doctor_Name,AppointmentDate,AppointmentTime,Disease) VALUES (%d,%d,'%s', '%s', '%s', '%s', '%s')" % (
@@ -108,14 +111,14 @@ def appointment(request):
                 c.execute("Select * from hospital_appointment")
                 appointments = c.fetchall()
                 context = {"appointments" : appointments}
-                return HttpResponse(render(request, "hospital/appointment_success.html", context))
+                return HttpResponse(render(request, "patient/appointment_success.html", context))
 
         except Exception as e:
             print(e)
             
     else:
         #If the method is "GET"
-        return HttpResponse(render(request, "hospital/appointment.html"))
+        return HttpResponse(render(request, "patient/appointment.html"))
 
 
 
@@ -123,7 +126,7 @@ def forgetpassword(request):
     '''
         Gives the link to password reset if Forgot....
     '''
-    return HttpResponse(render(request, "hospital/forgetpassword.html"))
+    return HttpResponse(render(request, "patient/forgetpassword.html"))
 
 
 
@@ -131,5 +134,5 @@ def signsuccess(request):
     '''
         Used to Redirect To the Login Page
     '''
-    return HttpResponse(render(request, "hospital/signsuccess.html")) 
+    return HttpResponse(render(request, "patient/signsuccess.html")) 
 
