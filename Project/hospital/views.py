@@ -34,7 +34,8 @@ def login_user(request):
 
         else:
             #if Not Registered Then ask to signup
-            return HttpResponse(render(request, "patient/login_fail.html"))
+            context = {"stop":True}
+            return HttpResponse(render(request, "patient/login.html", context))
 
     else:
         #If the method is "GET"

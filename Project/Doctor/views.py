@@ -8,34 +8,50 @@ from .models import SignUp
 
 def Doctor_SignUp(request):
     if(request.method == "POST"):
-        name = request.POST.get('Full_name')
+        dname = request.POST.get('Full_name')
         address = request.POST.get('Address')
         contact = int(request.POST.get('Contact'))
-        special = request.POST.get('Specialization')
+        special = request.POST.get('special')
         degree = request.POST.get('degree')
         gender = request.POST.get('Gender')
         pemail = request.POST.get('email')
         dpassword = request.POST.get('Password')
         Cpassword = request.POST.get('CPassword')
-        dnames = name.split()
+        dnames = dname.split()
         Id = SignUp.objects.count()
         Id+=10000
 
         if(dpassword != Cpassword):
             context = {"stop": True}
-            return HttpResponse(render(request, "doctor/signup.html", context))
-
+            return HttpResponse(render(request, "Doctor/signup.html", context))
+        name = "Dr "+dname
         try:
             user = User.objects.create_user(username=name, password=dpassword, email=pemail, first_name=dnames[0], last_name=dnames[-1], id=Id, is_staff=1)
             c = connection.cursor()
             c.execute("Insert into Doctor_signup values(%d,'%s','%s',%d,'%s','%s','%s','%s','%s')" % (Id,name,address,contact,pemail,special,degree,gender,dpassword))
-            return HttpResponse("Record Inserted")
+            return HttpResponse(render(request, "Doctor/signsuccess.html"))
         except Exception as e:
             print(e)
     else:
         return HttpResponse(render(request, 'Doctor/signup.html'))
 
 def Doctor_login(request):
-    return HttpResponse(render(request, 'Doctor/login.html'))
+    if(request.method == 'POST'):
+        un = request.POST.get('un')
+        pwd = request.POST.get('pwd')
+        user = authenticate(username = un, password = pwd)
+        if(user):
+            login(request, user)
+            name = str(user.username)
+            c = connection.cursor()
+            c.execute(
+                "Select * from hospital_appointment where Doctor_Name='%s'" % (un))
+            out = c.fetchall()
+            context = {'list' : out}
+            return HttpResponse(render(request, 'Doctor/login_success.html', context))
+        else:
+            return HttpResponse("Not Authenticated")
+    else:
+        return HttpResponse(render(request, 'Doctor/login.html'))
 
 

@@ -14,3 +14,5 @@ class SignUp(models.Model):
     Degree = models.CharField(max_length=10)
     Gender = models.CharField(max_length=8)
     Password = models.CharField(max_length=20)
+
+
